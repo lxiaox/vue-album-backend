@@ -16,7 +16,7 @@ module.exports = function (server,fs) {
     for (let i = 0; i < users.length; i++) {
       if (user.userName === users[i]['userName']) {
         found = true
-        if (user.password === users[i]['userName']) {
+        if (user.password === users[i]['password']) {
           match = true
         }
       }

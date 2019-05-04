@@ -30,6 +30,9 @@ server.use((request, response) => {
   response.send('Error page');
 });
 
+//
+//
+
 //Binding to a port
 server.listen(3000, () => {
   console.log('Express server started at port 3000');

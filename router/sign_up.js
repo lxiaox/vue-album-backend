@@ -18,10 +18,12 @@ module.exports = function (server,fs) {
       response.status(400)
       response.send('用户名被占用')
     } else {
+      // 1.users记录 2.albums下建一个文件夹 3.alblms/username/建一个allAlbum文件
       users.push(user)
       let usersString = JSON.stringify(users)
       fs.writeFileSync('./db/users', usersString)
-      fs.writeFileSync(`./db/albums/${user.userName}`, '[]')
+      fs.mkdirSync(`./db/albums/${user.userName}`)
+      fs.writeFileSync(`./db/albums/${user.userName}/allAlbum`, '[]')
       response.sendStatus(200)
     }
   })
