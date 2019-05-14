@@ -8,7 +8,6 @@ module.exports = function (server,fs) {
     files = JSON.parse(files)
     files.forEach(item => {
       // 封面base解码
-      console.log(item)
       let cover = 'data:image/jpeg;base64,' + fs.readFileSync(`./db/albums/${userName}/${item.albumName}/cover.png`, 'base64')
       returnAlbums.push({'albumName': item.albumName, 'cover': cover})
     });

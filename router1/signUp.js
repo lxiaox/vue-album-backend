@@ -1,30 +1,34 @@
 // 注册
-module.exports = function (server,fs,dbase) {
-  server.post('/sign_up', (request, response) => {
+module.exports = function (server, fs, MongoClient, url) {
+  server.post('/signUp', (request, response) => {
     let user = request.body
-    let users = fs.readFileSync('./db/users', 'utf8')
-    try {
-      users = JSON.parse(users)
-    } catch (exception) {
-      users = []
-    }
-    let inUse = false
-    for (let i = 0; i < users.length; i++) {
-      if (user.userName === users[i]['userName']) {
-        inUse = true
-      }
-    }
-    if (inUse) {
-      response.status(400)
-      response.send('用户名被占用')
-    } else {
-      // 1.users记录 2.albums下建一个文件夹 3.alblms/username/建一个allAlbum文件
-      users.push(user)
-      let usersString = JSON.stringify(users)
-      fs.writeFileSync('./db/users', usersString)
-      fs.mkdirSync(`./db/albums/${user.userName}`)
-      fs.writeFileSync(`./db/albums/${user.userName}/allAlbum`, '[]')
-      response.sendStatus(200)
-    }
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+      if (err) throw err
+      let dbo = db.db("AlbumDB")
+      var inUse = 0
+      dbo.collection('users').find({ 'userName': user.userName }).toArray(function (err, result) {
+        if (err) throw err;
+        if (result.toString() !== '') {
+          response.status(400)
+          response.send('用户名被占用')
+        } else {
+          // users表增加信息
+          dbo.collection('users').insertOne(user, function (err, res) {
+            if (err) throw err;
+            console.log('数据插入成功')
+            response.status(200)
+            response.send('注册成功')
+            // 新增userName表, 新建文件夹
+            if (!fs.existsSync(`./db1/albums/${user.userName}`)) {
+              fs.mkdirSync(`./db1/albums/${user.userName}`)
+            }
+            dbo.createCollection(user.userName, function (err, res) {
+              if (err) throw err;
+              db.close();
+            });
+          })
+        }
+      })
+    })
   })
 }
