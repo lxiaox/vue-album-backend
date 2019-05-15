@@ -5,7 +5,6 @@ module.exports = function (server, fs, MongoClient, url) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err
       let dbo = db.db("AlbumDB")
-      var inUse = 0
       dbo.collection('users').find({ 'userName': user.userName }).toArray(function (err, result) {
         if (err) throw err;
         if (result.toString() !== '') {
@@ -18,14 +17,20 @@ module.exports = function (server, fs, MongoClient, url) {
             console.log('数据插入成功')
             response.status(200)
             response.send('注册成功')
-            // 新增userName表, 新建文件夹
-            if (!fs.existsSync(`./db1/albums/${user.userName}`)) {
-              fs.mkdirSync(`./db1/albums/${user.userName}`)
+            //  新建文件夹
+            let userId = res.insertedId.toString()
+            if (!fs.existsSync(`./db1/albums/${userId}`)) {
+              fs.mkdirSync(`./db1/albums/${userId}`)
             }
-            dbo.createCollection(user.userName, function (err, res) {
+            // 新增userId albums表
+            dbo.createCollection(userId, function (err, res) {
               if (err) throw err;
-              db.close();
-            });
+              // 新增userId images表 
+              dbo.createCollection(`${userId}-images`, function (err, res) {
+                if (err) throw err;
+                db.close();
+              })
+            })
           })
         }
       })

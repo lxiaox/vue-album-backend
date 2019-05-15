@@ -7,12 +7,12 @@ module.exports = function (server, fs, MongoClient, url) {
       let dbo = db.db("AlbumDB")
       dbo.collection('users').find({ 'userName': user.userName, 'password': user.password }).toArray(function (err, result) {
         if (err) throw err;
-        result = result.toString()
-        if (result === '') {
+        if (result.toString() === '') {
           response.status(404)
           response.send('用户名或密码错误')
         } else {
-          response.sendStatus(200)
+          response.status(200)
+          response.send(result[0])
         }
       })
       db.close()

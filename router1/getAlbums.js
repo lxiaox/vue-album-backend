@@ -1,13 +1,12 @@
 module.exports = function (server, fs, MongoClient, url) {
   // 获取相册
   server.get('/getAlbums', (request, response) => {
-    let userName = request.query.userName
+    let userId = request.query.userId
     let returnAlbums = []
-    // 读取allAlbum，按顺序排列
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err
       let dbo = db.db("AlbumDB")
-      dbo.collection(userName).find({ 'isDeleted': false }).toArray(function (err, result) {
+      dbo.collection(userId).find({ 'isDeleted': false }).toArray(function (err, result) {
         if (err) throw err;
         if (result.toString() === '') {
           response.status(404)
@@ -20,7 +19,14 @@ module.exports = function (server, fs, MongoClient, url) {
             } else {
               cover = cover + fs.readFileSync('./db1/defaultCover/defaultCover.png', 'base64')
             }
-            returnAlbums.unshift({ 'albumName': item.albumName, 'cover': cover, 'imageCounts':item.imageCounts })
+            returnAlbums.unshift({
+              'albumId': item._id,
+              'albumName': item.albumName,
+              'cover': cover,
+              'imageCounts': item.imageCounts,
+              'description': item.description,
+              'classification': item.classification
+            })
           })
           response.status(200)
           response.send(returnAlbums)

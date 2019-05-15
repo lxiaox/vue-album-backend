@@ -4,8 +4,8 @@ const express = require('express'),
 var fs = require('fs')
 // 解析body
 var bodyParser = require('body-parser')
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({ extended: true }))
+server.use(bodyParser.json({ limit:'10mb', extended:true }))
+server.use(bodyParser.urlencoded({ limit:'10mb', extended: true }))
 // date format
 var dateTime = require('node-datetime');
 // var dt = dateTime.create();
@@ -23,13 +23,21 @@ server.all('*', (req, res, next) => {
 //数据库连接
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/AlbumDB";
+var ObjectID = require('mongodb').ObjectID
 // 接口
 require('./router1/signUp')(server, fs, MongoClient, url)
 require('./router1/signIn')(server, fs, MongoClient, url)
 require('./router1/getAlbums')(server, fs, MongoClient, url)
 require('./router1/addAlbum')(server, fs, MongoClient, url)
+require('./router1/editAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/deleteAlbum')(server, fs, MongoClient, url, ObjectID)
 // test
-
+// MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+//   if (err) throw err
+//   let dbo = db.db("AlbumDB")
+//   let lxx = 'lxx'
+//   dbo.collection('lxx').rename('5cd653bda5cf664078a3c583')
+// })
 
 //Express error handling middleware
 server.use((request, response) => {
