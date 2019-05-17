@@ -17,20 +17,7 @@ module.exports = function (server, fs, MongoClient, url) {
             console.log('数据插入成功')
             response.status(200)
             response.send('注册成功')
-            //  新建文件夹
-            let userId = res.insertedId.toString()
-            if (!fs.existsSync(`./db1/albums/${userId}`)) {
-              fs.mkdirSync(`./db1/albums/${userId}`)
-            }
-            // 新增userId albums表
-            dbo.createCollection(userId, function (err, res) {
-              if (err) throw err;
-              // 新增userId images表 
-              dbo.createCollection(`${userId}-images`, function (err, res) {
-                if (err) throw err;
-                db.close();
-              })
-            })
+            db.close()
           })
         }
       })

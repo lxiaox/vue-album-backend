@@ -31,6 +31,8 @@ require('./router1/getAlbums')(server, fs, MongoClient, url)
 require('./router1/addAlbum')(server, fs, MongoClient, url)
 require('./router1/editAlbum')(server, fs, MongoClient, url, ObjectID)
 require('./router1/deleteAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/getImages')(server, fs, MongoClient, url, ObjectID)
+require('./router1/addImage')(server, fs, MongoClient, url, dateTime)
 // test
 // MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 //   if (err) throw err
