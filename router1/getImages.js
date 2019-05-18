@@ -1,8 +1,8 @@
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
-  // 获取相册
+  // 获取图片
   server.get('/getImages', (request, response) => {
-    let userId = request.body.userId
-    let albumId = request.body.albumId
+    let userId = request.query.userId
+    let albumId = request.query.albumId
     let returnImages = []
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err

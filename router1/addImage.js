@@ -6,7 +6,7 @@ module.exports = function (server, fs, MongoClient, url, dateTime) {
       // 按日期命名
       var dt = dateTime.create();
       var imageName = dt.format('Y-m-d');
-      var imageSaveName = dt.format('Y-m-d H:M:S:MS');
+      var imageSaveName = dt.format('Y-m-d-H-M-S-MS-NS');
       // 存图片
       let imgData = request.body.image.replace(/^data:image\/\w+;base64,/, '')
       let dataBuffer = new Buffer(imgData, 'base64')
@@ -14,7 +14,7 @@ module.exports = function (server, fs, MongoClient, url, dateTime) {
       // 存db
       let imageObj = {
         userId: request.body.userId,
-        albumId: request.body.albumId,
+        albumId: request.body.album.albumId,
         isDeleted: false,
         imageSrc: `./db1/albums/images/${imageSaveName}.png`,
         imageName: imageName,// 可变

@@ -1,7 +1,7 @@
 module.exports = function (server, fs, MongoClient, url) {
   // 获取相册
   server.get('/getAlbums', (request, response) => {
-    let userId = request.body.userId
+    let userId = request.query.userId
     let returnAlbums = []
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err
