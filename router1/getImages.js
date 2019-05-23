@@ -7,18 +7,10 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err
       let dbo = db.db("AlbumDB")
-      let whereStr = {}
-      if (albumId === 'all') {
-        whereStr = {
-          'userId': userId,
-          'isDeleted': false
-        }
-      }else {
-        whereStr = {
-          'userId': userId,
-          'albumId': albumId,
-          'isDeleted': false
-        }
+      let whereStr = {
+        'userId': userId,
+        'albumId': albumId,
+        'isDeleted': false
       }
       dbo.collection('images').find(whereStr).toArray(function (err, result) {
         if (err) throw err;
@@ -27,12 +19,15 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
           response.send('未添加任何照片')
         } else {
           result.forEach(item => {
-            let imageSrc = 'data:image/jpeg;base64,'
-            imageSrc = imageSrc + fs.readFileSync(`${item.imageSrc}`, 'base64')
+            let imageData = 'data:image/jpeg;base64,'
+            imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
             returnImages.unshift({
               'imageId': item._id,
-              'imageName': item.albumName,
-              'imageSrc': imageSrc,
+              'imageName': item.imageName,
+              'imageData': imageData,
+              'description': item.description,
+              'filmingLocation': item.filmingLocation,
+              'imageSrc': item.imageSrc
             })
           })
           response.status(200)

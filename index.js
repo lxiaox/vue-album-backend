@@ -28,11 +28,15 @@ var ObjectID = require('mongodb').ObjectID
 require('./router1/signUp')(server, fs, MongoClient, url)
 require('./router1/signIn')(server, fs, MongoClient, url)
 require('./router1/getAlbums')(server, fs, MongoClient, url)
+require('./router1/getOneAlbum')(server, fs, MongoClient, url, ObjectID)
 require('./router1/addAlbum')(server, fs, MongoClient, url)
 require('./router1/editAlbum')(server, fs, MongoClient, url, ObjectID)
-require('./router1/deleteAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/deleteAlbum')(server, fs, MongoClient, url, dateTime, ObjectID)
 require('./router1/getImages')(server, fs, MongoClient, url, ObjectID)
-require('./router1/addImage')(server, fs, MongoClient, url, dateTime)
+require('./router1/addImage')(server, fs, MongoClient, url, dateTime, ObjectID)
+require('./router1/deleteImage')(server, fs, MongoClient, url, dateTime, ObjectID)
+require('./router1/setImageAsCover')(server, fs, MongoClient, url, dateTime, ObjectID)
+require('./router1/editImageMessage')(server, fs, MongoClient, url, ObjectID)
 // test
 // MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 //   if (err) throw err
