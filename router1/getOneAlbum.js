@@ -9,7 +9,6 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
       dbo.collection('albums').find({ '_id': ObjectID(albumId) }).toArray(function (err, result) {
         if (err) throw err;
         let item = result[0]
-        console.log(result)
         let cover = 'data:image/jpeg;base64,'
         if (item.coverSrc && fs.existsSync(`${item.coverSrc}`)) {
           cover = cover + fs.readFileSync(`${item.coverSrc}`, 'base64')
