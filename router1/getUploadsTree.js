@@ -1,10 +1,10 @@
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
   // 获取图片
-  server.get('/getImagesTree', (request, response) => {
+  server.get('/getUploadsTree', (request, response) => {
     // 初始化
     let userId = request.query.userId
-    let amount = request.query.queryAmount
-    let count = request.query.queryCount * amount
+    let amount = Number(request.query.queryAmount)
+    let count = Number(request.query.queryCount) * amount
     let returnImagesTree = []
     //查albumName
     function findAlbumName(album, dbo) {
@@ -47,7 +47,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
       }
       dbo.collection('uploads').find(whereStr)
         .sort({ '_id': -1 })
-        .skip(Number(count)).limit(Number(amount))
+        .skip(count).limit(amount)
         .toArray(function (err, result) {
           if (err) throw err;
           if (result.toString() === '') {
@@ -58,7 +58,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
             let forCount = 0
             let length = result.length
             //对结果进行循环，每一个：查albumName，查该次上传所有图片，push这个结果
-            result.forEach((item) => {
+            function getResult(item) {
               let treeObj = {
                 uploadNumber: item._id,
                 albumId: item.albumId,
@@ -71,16 +71,19 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
                 //查图片
                 return findImages(item._id, dbo)
               }).then(value => {
+                forCount = forCount + 1
                 treeObj.imagesArr = value
                 returnImagesTree.push(treeObj)
-                forCount = forCount + 1
                 if (forCount === length) {
                   response.status(200)
                   response.send(returnImagesTree)
                   db.close()
+                }else{
+                  getResult(result[forCount])
                 }
               })
-            })
+            }
+            getResult(result[0])
           }
         })
     })
