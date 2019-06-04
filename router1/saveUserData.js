@@ -13,9 +13,9 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
         let dataBuffer = new Buffer(avaterData, 'base64')
         fs.writeFileSync(avaterSrc, dataBuffer)
       }
-      dbo.collection('users').find({ 'userName': user.newName }).toArray(function (err, result) {
+      dbo.collection('users').find({ 'userName': user.userName }).toArray(function (err, result) {
         if (err) throw err
-        if (result.toString() !== '' && user.newName !== user.userName) {
+        if (result[0] && (result[0]._id.toString() !== user._id) ) {
           response.status(400)
           response.send('用户名已存在')
           db.close();
@@ -24,7 +24,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
         var whereStr = { "_id": ObjectID(user._id) };  // 查询条件
         var updateStr = {
           $set: {
-            'userName': user.newName,
+            'userName': user.userName,
             'password': password,
             'gender': user.gender,
             'avaterSrc': avaterSrc
