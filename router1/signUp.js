@@ -2,6 +2,7 @@
 module.exports = function (server, fs, MongoClient, url) {
   server.post('/signUp', (request, response) => {
     let user = request.body
+    user.gender = 'male'
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err
       let dbo = db.db("AlbumDB")

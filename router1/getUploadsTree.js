@@ -78,7 +78,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
                   response.status(200)
                   response.send(returnImagesTree)
                   db.close()
-                }else{
+                } else {
                   getResult(result[forCount])
                 }
               })

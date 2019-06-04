@@ -42,13 +42,8 @@ require('./router1/setImageAsCover')(server, fs, MongoClient, url, dateTime, Obj
 require('./router1/editImageMessage')(server, fs, MongoClient, url, ObjectID)
 require('./router1/addUpload')(server, fs, MongoClient, url, dateTime)
 require('./router1/deleteUpload')(server, fs, MongoClient, url, dateTime, ObjectID)
-// test
-// MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
-//   if (err) throw err
-//   let dbo = db.db("AlbumDB")
-//   let lxx = 'lxx'
-//   dbo.collection('lxx').rename('5cd653bda5cf664078a3c583')
-// })
+require('./router1/saveUserData')(server, fs, MongoClient, url, ObjectID)
+
 
 //Express error handling middleware
 server.use((request, response) => {
