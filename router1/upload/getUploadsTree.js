@@ -12,7 +12,6 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
       return new Promise((resolve, reject) => {
         dbo.collection('albums').find({
           '_id': ObjectID(albumId),
-          'isDeleted': false
         }).toArray(function (err, result) {
           if (err) throw err;
           let albumName = result[0].albumName
@@ -29,12 +28,15 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
           'isDeleted': false
         }).toArray(function (err, result) {
           if (err) throw err;
-          result.forEach(item => {
-            let img = 'data:image/jpeg;base64,'
-            img = img + fs.readFileSync(`${item.imageSrc}`, 'base64')
-            item.imageData = img
-          })
-          resolve(result)
+          if (result.length === 0) { reject() }
+          else {
+            result.forEach(item => {
+              let img = 'data:image/jpeg;base64,'
+              img = img + fs.readFileSync(`${item.imageSrc}`, 'base64')
+              item.imageData = img
+            })
+            resolve(result)
+          }
         })
       })
     }
@@ -69,18 +71,29 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
                 treeObj.albumName = value
               }).then(value => {
                 //查图片
-                return findImages(item._id, dbo)
-              }).then(value => {
-                forCount = forCount + 1
-                treeObj.imagesArr = value
-                returnImagesTree.push(treeObj)
-                if (forCount === length) {
-                  response.status(200)
-                  response.send(returnImagesTree)
-                  db.close()
-                } else {
-                  getResult(result[forCount])
-                }
+                findImages(item._id, dbo).then(value => {
+                  treeObj.imagesArr = value
+                  returnImagesTree.push(treeObj)
+                  forCount = forCount + 1
+                  if (forCount === length) {
+                    response.status(200)
+                    response.send(returnImagesTree)
+                    db.close()
+                  } else {
+                    getResult(result[forCount])
+                  }
+                }, err => {
+                  forCount = forCount + 1
+                  if (forCount === length) {
+                    response.status(200)
+                    response.send(returnImagesTree)
+                    db.close()
+                  } else {
+                    getResult(result[forCount])
+                  }
+                })
+              }, err => {
+
               })
             }
             getResult(result[0])

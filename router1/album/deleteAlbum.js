@@ -10,14 +10,27 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
       var updateStr = {
         $set: {
           'isDeleted': true,
-          'deleteDate': deleteDate
+          'deleteDate': deleteDate,
+        }
+      }
+      var updateStr2 = {
+        $set: {
+          'isDeleted': true,
+          'deleteDate': deleteDate,
+          'deleteWithAlbum': true
         }
       };
       dbo.collection('albums').updateOne(whereStr, updateStr, function (err, res) {
         if (err) throw err;
         console.log("删除相册成功");
         response.sendStatus(200)
-        db.close();
+        dbo.collection('images').updateMany({ 'albumId': albumId }, updateStr2, function (err, res) {
+          if (err) throw err;
+          dbo.collection('uploads').updateMany({ 'albumId': albumId }, updateStr2, function (err, res) {
+            if (err) throw err;
+            db.close()
+          });
+        });
       });
     })
   })

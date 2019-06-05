@@ -11,7 +11,8 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
       var updateStr = {
         $set: {
           'isDeleted': true,
-          'deleteDate': deleteDate
+          'deleteDate': deleteDate,
+          'deleteWithAlbum': false
         }
       };
       dbo.collection('images').updateOne(whereStr, updateStr, function (err, res) {

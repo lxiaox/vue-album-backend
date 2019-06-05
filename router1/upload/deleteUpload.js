@@ -1,7 +1,6 @@
 module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
   server.post('/deleteUpload', (request, response) => {
     let uploadId = request.body.uploadId
-    console.log(uploadId)
     var dt = dateTime.create();
     var deleteDate = dt.format('Y-m-d');
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
@@ -11,7 +10,8 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
       var updateStr = {
         $set: {
           'isDeleted': true,
-          'deleteDate': deleteDate
+          'deleteDate': deleteDate,
+          'deleteWithAlbum': false
         }
       };
       dbo.collection('uploads').updateOne(whereStr, updateStr, function (err, res) {

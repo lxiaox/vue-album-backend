@@ -22,7 +22,6 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
         imageSaveName: imageSaveName,// 不可变
         uploadNumber: request.body.uploadNumber
       }
-      console.log(imageObj.uploadNumber)
       dbo.collection('images').insertOne(imageObj, function (err, res) {
         if (err) throw err;
         console.log("保存上传图片成功");

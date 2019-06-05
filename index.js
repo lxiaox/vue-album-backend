@@ -25,24 +25,34 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/AlbumDB";
 var ObjectID = require('mongodb').ObjectID
 // 接口
-require('./router1/signUp')(server, fs, MongoClient, url)
-require('./router1/signIn')(server, fs, MongoClient, url)
-require('./router1/getUserData')(server, fs, MongoClient, url, ObjectID)
-require('./router1/getAlbums')(server, fs, MongoClient, url)
-require('./router1/getAlbum')(server, fs, MongoClient, url, ObjectID)
-require('./router1/addAlbum')(server, fs, MongoClient, url)
-require('./router1/editAlbum')(server, fs, MongoClient, url, ObjectID)
-require('./router1/deleteAlbum')(server, fs, MongoClient, url, dateTime, ObjectID)
-require('./router1/getImages')(server, fs, MongoClient, url, ObjectID)
-require('./router1/getUploadsTree')(server, fs, MongoClient, url, ObjectID)
-require('./router1/getImagesData')(server, fs, MongoClient, url, ObjectID)
-require('./router1/addImage')(server, fs, MongoClient, url, dateTime, ObjectID)
-require('./router1/deleteImage')(server, fs, MongoClient, url, dateTime, ObjectID)
-require('./router1/setImageAsCover')(server, fs, MongoClient, url, dateTime, ObjectID)
-require('./router1/editImageMessage')(server, fs, MongoClient, url, ObjectID)
-require('./router1/addUpload')(server, fs, MongoClient, url, dateTime)
-require('./router1/deleteUpload')(server, fs, MongoClient, url, dateTime, ObjectID)
-require('./router1/saveUserData')(server, fs, MongoClient, url, ObjectID)
+// 登录注册
+require('./router1/sign/signUp')(server, fs, MongoClient, url)
+require('./router1/sign/signIn')(server, fs, MongoClient, url)
+// 用户信息
+require('./router1/user/getUserData')(server, fs, MongoClient, url, ObjectID)
+require('./router1/user/saveUserData')(server, fs, MongoClient, url, ObjectID)
+// 相册
+require('./router1/album/getAlbums')(server, fs, MongoClient, url)
+require('./router1/album/getAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/album/addAlbum')(server, fs, MongoClient, url)
+require('./router1/album/editAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/album/deleteAlbum')(server, fs, MongoClient, url, dateTime, ObjectID)
+// 照片
+require('./router1/image/getImages')(server, fs, MongoClient, url, ObjectID)
+require('./router1/image/getImagesData')(server, fs, MongoClient, url, ObjectID)
+require('./router1/image/addImage')(server, fs, MongoClient, url, dateTime, ObjectID)
+require('./router1/image/deleteImage')(server, fs, MongoClient, url, dateTime, ObjectID)
+require('./router1/image/setImageAsCover')(server, fs, MongoClient, url, dateTime, ObjectID)
+require('./router1/image/editImageMessage')(server, fs, MongoClient, url, ObjectID)
+// 照片上传以及上传页
+require('./router1/upload/addUpload')(server, fs, MongoClient, url, dateTime)
+require('./router1/upload/getUploadsTree')(server, fs, MongoClient, url, ObjectID)
+require('./router1/upload/deleteUpload')(server, fs, MongoClient, url, dateTime, ObjectID)
+// 回收站
+require('./router1/recycleBin/getDeletedAlbums')(server, fs, MongoClient, url, ObjectID)
+require('./router1/recycleBin/getDeletedImages')(server, fs, MongoClient, url, ObjectID)
+require('./router1/recycleBin/reAddAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/recycleBin/reAddImage')(server, fs, MongoClient, url, ObjectID)
 
 
 //Express error handling middleware
