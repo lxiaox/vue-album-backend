@@ -20,12 +20,16 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
         imageSrc: `./db1/albums/images/${imageSaveName}.png`,
         imageName: imageName,// 可变
         imageSaveName: imageSaveName,// 不可变
-        uploadNumber: request.body.uploadNumber
+        uploadId: request.body.uploadId
       }
+      console.log(request.body.uploadId)
       dbo.collection('images').insertOne(imageObj, function (err, res) {
         if (err) throw err;
-        console.log("保存上传图片成功");
-        response.sendStatus(200)
+        if (res.result.ok === 0) {
+          response.sendStatus(500)
+          db.close()
+          return
+        }
         dbo.collection('albums').find({ _id: ObjectID(albumId) })
           .toArray(function (err, result) {
             if (err) throw err;
@@ -38,6 +42,14 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
             };
             dbo.collection('albums').updateOne(whereStr, updateStr, function (err, res) {
               if (err) throw err;
+              console.log(res.result)
+              if (res.result.ok === 0) {
+                response.sendStatus(500)
+                db.close()
+                return
+              }
+              console.log("保存上传图片成功");
+              response.sendStatus(200)
               db.close()
             })
           })

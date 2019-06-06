@@ -21,10 +21,10 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
     }
     //查图片
     function findImages(number, dbo) {
-      let uploadNumber = number.toString()
+      let uploadId = number.toString()
       return new Promise((resolve, reject) => {
         dbo.collection('images').find({
-          'uploadNumber': uploadNumber,
+          'uploadId': uploadId,
           'isDeleted': false
         }).toArray(function (err, result) {
           if (err) throw err;
@@ -62,7 +62,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
             //对结果进行循环，每一个：查albumName，查该次上传所有图片，push这个结果
             function getResult(item) {
               let treeObj = {
-                uploadNumber: item._id,
+                uploadId: item._id,
                 albumId: item.albumId,
                 uploadDate: item.uploadDate
               }

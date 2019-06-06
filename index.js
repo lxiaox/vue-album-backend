@@ -4,8 +4,8 @@ const express = require('express'),
 var fs = require('fs')
 // 解析body
 var bodyParser = require('body-parser')
-server.use(bodyParser.json({ limit:'10mb', extended:true }))
-server.use(bodyParser.urlencoded({ limit:'10mb', extended: true }))
+server.use(bodyParser.json({ limit: '10mb', extended: true }))
+server.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 // date format
 var dateTime = require('node-datetime');
 // var dt = dateTime.create();
@@ -24,6 +24,7 @@ server.all('*', (req, res, next) => {
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/AlbumDB";
 var ObjectID = require('mongodb').ObjectID
+
 // 接口
 // 登录注册
 require('./router1/sign/signUp')(server, fs, MongoClient, url)

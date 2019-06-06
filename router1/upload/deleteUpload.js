@@ -14,8 +14,12 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
           'deleteWithAlbum': false
         }
       };
+      console.log(uploadId)
       dbo.collection('uploads').updateOne(whereStr, updateStr, function (err, res) {
         if (err) throw err;
+        console.log(res)
+        if (res.modifiedCount === 0) {
+        }
         console.log('删除上传记录成功')
         response.sendStatus(200)
         db.close()

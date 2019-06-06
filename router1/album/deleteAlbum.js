@@ -24,9 +24,9 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
         if (err) throw err;
         console.log("删除相册成功");
         response.sendStatus(200)
-        dbo.collection('images').updateMany({ 'albumId': albumId }, updateStr2, function (err, res) {
+        dbo.collection('images').updateMany({ 'albumId': albumId, 'isDeleted': false }, updateStr2, function (err, res) {
           if (err) throw err;
-          dbo.collection('uploads').updateMany({ 'albumId': albumId }, updateStr2, function (err, res) {
+          dbo.collection('uploads').updateMany({ 'albumId': albumId, 'isDeleted': false }, updateStr2, function (err, res) {
             if (err) throw err;
             db.close()
           });

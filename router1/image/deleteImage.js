@@ -24,6 +24,7 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
           .toArray(function (err, result) {
             if (err) throw err;
             let counts = result[0].imageCounts - 1
+            if(counts < 0) counts = 0
             var whereStr = { "_id": ObjectID(albumId) };
             var updateStr = {
               $set: {
