@@ -22,7 +22,6 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
         imageSaveName: imageSaveName,// 不可变
         uploadId: request.body.uploadId
       }
-      console.log(request.body.uploadId)
       dbo.collection('images').insertOne(imageObj, function (err, res) {
         if (err) throw err;
         if (res.result.ok === 0) {
@@ -42,7 +41,6 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
             };
             dbo.collection('albums').updateOne(whereStr, updateStr, function (err, res) {
               if (err) throw err;
-              console.log(res.result)
               if (res.result.ok === 0) {
                 response.sendStatus(500)
                 db.close()

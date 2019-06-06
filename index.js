@@ -54,6 +54,8 @@ require('./router1/recycleBin/getDeletedAlbums')(server, fs, MongoClient, url, O
 require('./router1/recycleBin/getDeletedImages')(server, fs, MongoClient, url, ObjectID)
 require('./router1/recycleBin/reAddAlbum')(server, fs, MongoClient, url, ObjectID)
 require('./router1/recycleBin/reAddImage')(server, fs, MongoClient, url, ObjectID)
+require('./router1/recycleBin/clearAlbum')(server, fs, MongoClient, url, ObjectID)
+require('./router1/recycleBin/clearImage')(server, fs, MongoClient, url, ObjectID)
 
 
 //Express error handling middleware
