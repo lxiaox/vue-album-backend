@@ -1,5 +1,5 @@
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
-  // 获取所有图片数据
+  // 布局展示 获取所有图片（图数据）
   server.get('/getImagesData', (request, response) => {
     let userId = request.query.userId
     let returnImages = []
@@ -18,7 +18,11 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
         } else {
           result.forEach(item => {
             let imageData = 'data:image/jpeg;base64,'
-            imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
+            if (item.imageSrc && fs.existsSync(`${item.imageSrc}`)) {
+              imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
+            } else {
+              imageData = ''
+            }
             returnImages.unshift({
               'imageData': imageData,
             })

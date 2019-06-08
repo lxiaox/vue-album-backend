@@ -1,5 +1,5 @@
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
-  // 获取图片
+  // albumView 获取图片 （图片信息 + 图数据据）
   server.get('/getImages', (request, response) => {
     let userId = request.query.userId
     let albumId = request.query.albumId
@@ -20,7 +20,11 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
         } else {
           result.forEach(item => {
             let imageData = 'data:image/jpeg;base64,'
-            imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
+            if (item.imageSrc && fs.existsSync(`${item.imageSrc}`)) {
+              imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
+            } else {
+              imageData = ''
+            }
             returnImages.unshift({
               'imageId': item._id,
               'imageName': item.imageName,
