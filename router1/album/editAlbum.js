@@ -1,3 +1,4 @@
+// 编辑相册
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
   server.post('/editAlbum', (request, response) => {
     let albumId = request.body.albumId

@@ -25,6 +25,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
             }
             returnImages.unshift({
               'imageData': imageData,
+              'isVideo': item.isVideo
             })
           })
           response.status(200)

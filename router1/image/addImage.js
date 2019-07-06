@@ -1,3 +1,4 @@
+// 上传照片或视频
 module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
   server.post('/addImage', (request, response) => {
     let albumId = request.body.albumId
@@ -8,16 +9,27 @@ module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
       var dt = dateTime.create();
       var imageName = dt.format('Y-m-d');
       var imageSaveName = dt.format('Y-m-d-H-M-S-MS-NS');
+      let saveSrc = ''
+      let imgData
       // 存图片
-      let imgData = request.body.image.replace(/^data:image\/\w+;base64,/, '')
+      if (!request.body.isVideo) {
+        saveSrc = `./db1/albums/images/${imageSaveName}.png`
+        imgData = request.body.image.replace(/^data:image\/\w+;base64,/, '')
+      }
+      if (request.body.isVideo) {
+        saveSrc = `./db1/albums/images/${imageSaveName}.mp4`
+        imgData = request.body.image.replace(/^data:video\/\w+;base64,/, '')
+      }
       let dataBuffer = new Buffer(imgData, 'base64')
-      fs.writeFileSync(`./db1/albums/images/${imageSaveName}.png`, dataBuffer)
+      fs.writeFileSync(saveSrc, dataBuffer)
+
       // 存db
       let imageObj = {
         userId: request.body.userId,
         albumId: albumId,
         isDeleted: false,
-        imageSrc: `./db1/albums/images/${imageSaveName}.png`,
+        imageSrc: saveSrc,
+        isVideo: request.body.isVideo,
         imageName: imageName,// 可变
         imageSaveName: imageSaveName,// 不可变
         uploadId: request.body.uploadId

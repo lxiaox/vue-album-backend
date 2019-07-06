@@ -19,6 +19,9 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
         } else {
           result.forEach(item => {
             let imageData = 'data:image/jpeg;base64,'
+            if (item.isVideo) {
+                imageData = 'data:video/mp4;base64,'
+              }
             imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
             returnImages.unshift({
               'imageId': item._id,
@@ -26,7 +29,8 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
               'imageData': imageData,
               'description': item.description,
               'filmingLocation': item.filmingLocation,
-              'imageSrc': item.imageSrc
+              'imageSrc': item.imageSrc,
+              'isVideo': item.isVideo
             })
           })
           response.status(200)

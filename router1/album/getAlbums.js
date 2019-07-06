@@ -1,5 +1,5 @@
+// 获取相册
 module.exports = function (server, fs, MongoClient, url) {
-  // 获取相册
   server.get('/getAlbums', (request, response) => {
     let userId = request.query.userId
     let returnAlbums = []

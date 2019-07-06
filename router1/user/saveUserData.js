@@ -1,5 +1,5 @@
+// 保存用户信息
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
-  // 获取用户信息
   server.post('/saveUserData', (request, response) => {
     let user = request.body.user
     let password = user.newPassword || user.password
@@ -15,7 +15,7 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
       }
       dbo.collection('users').find({ 'userName': user.userName }).toArray(function (err, result) {
         if (err) throw err
-        if (result[0] && (result[0]._id.toString() !== user._id) ) {
+        if (result[0] && (result[0]._id.toString() !== user._id)) {
           response.status(400)
           response.send('用户名已存在')
           db.close();

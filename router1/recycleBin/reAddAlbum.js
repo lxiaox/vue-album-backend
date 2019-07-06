@@ -1,3 +1,4 @@
+// 回收相册
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
   server.post('/reAddAlbum', (request, response) => {
     let albumId = request.body.albumId

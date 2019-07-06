@@ -1,11 +1,11 @@
+// 获取用户信息
 module.exports = function (server, fs, MongoClient, url, ObjectID) {
-  // 获取用户信息
   server.get('/getUserData', (request, response) => {
     let userId = request.query.userId
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
       if (err) throw err
       let dbo = db.db("AlbumDB")
-      if(!userId) {
+      if (!userId) {
         response.sendStatus(400)
         return
       }

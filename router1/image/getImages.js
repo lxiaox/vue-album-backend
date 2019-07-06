@@ -19,7 +19,12 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
           response.send('未添加任何照片')
         } else {
           result.forEach(item => {
-            let imageData = 'data:image/jpeg;base64,'
+            let imageData = ''
+            if(!item.isVideo){
+              imageData = 'data:image/jpeg;base64,'
+            }else{
+              imageData = 'data:video/mp4;base64,'
+            }
             if (item.imageSrc && fs.existsSync(`${item.imageSrc}`)) {
               imageData = imageData + fs.readFileSync(`${item.imageSrc}`, 'base64')
             } else {
@@ -31,7 +36,8 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
               'imageData': imageData,
               'description': item.description,
               'filmingLocation': item.filmingLocation,
-              'imageSrc': item.imageSrc
+              'imageSrc': item.imageSrc,
+              'isVideo': item.isVideo
             })
           })
           response.status(200)

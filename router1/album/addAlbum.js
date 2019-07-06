@@ -1,3 +1,4 @@
+// 创建相册
 module.exports = function (server, fs, MongoClient, url) {
   server.post('/addAlbum', (request, response) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {

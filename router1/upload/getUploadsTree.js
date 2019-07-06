@@ -32,6 +32,9 @@ module.exports = function (server, fs, MongoClient, url, ObjectID) {
           else {
             result.forEach(item => {
               let img = 'data:image/jpeg;base64,'
+              if (item.isVideo) {
+                img = 'data:video/mp4;base64,'
+              }
               if (item.imageSrc && fs.existsSync(`${item.imageSrc}`)) {
                 img = img + fs.readFileSync(`${item.imageSrc}`, 'base64')
               } else {

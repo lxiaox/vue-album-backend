@@ -1,3 +1,4 @@
+// 删除相册
 module.exports = function (server, fs, MongoClient, url, dateTime, ObjectID) {
   server.post('/deleteAlbum', (request, response) => {
     let albumId = request.body.albumId
